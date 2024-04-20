@@ -21,7 +21,6 @@ class FirebaseAuthManager {
     func login(email: String, password: String, userType: UserType, completion: @escaping (Result<User, Error>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { [self] (result, error) in
             if let user = result?.user {
-                // Check user type and handle accordingly
                 self.navigateToLandingView(userType: userType)
                 completion(.success(user))
             } else if let error = error {
@@ -33,7 +32,6 @@ class FirebaseAuthManager {
     func signup(name: String, email: String, dob: String, password: String, userType: UserType, completion: @escaping (Result<User, Error>) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { [self] (result, error) in
             if let user = result?.user {
-                // Optionally update user profile (name, dob, etc.) here
                 self.navigateToLandingView(userType: userType)
                 completion(.success(user))
             } else if let error = error {
@@ -53,13 +51,10 @@ class FirebaseAuthManager {
     private func navigateToLandingView(userType: UserType) {
         switch userType {
         case .admin:
-            // Navigate to Admin landing view
             print("Navigate to Admin landing view")
         case .librarian:
-            // Navigate to Librarian landing view
             print("Navigate to Librarian landing view")
         case .member:
-            // Navigate to Member landing view
             print("Navigate to Member landing view")
         }
     }

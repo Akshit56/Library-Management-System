@@ -12,11 +12,11 @@ import Firebase
 struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var selectedUserType: UserType = .admin // Default user type
+    @State private var selectedUserType: UserType = .admin
 
-    @State private var isLoggedIn: Bool = false // State to track login status
-    @State private var loginError: String? // State to track login error
-    @State private var showAlert: Bool = false // State to control alert presentation
+    @State private var isLoggedIn: Bool = false
+    @State private var loginError: String?
+    @State private var showAlert: Bool = false
 
     var body: some View {
         NavigationView {
@@ -72,13 +72,18 @@ struct LoginView: View {
                     .hidden()
 
                     HStack{
-                        Spacer()
 
-                        NavigationLink(destination: SignupView().navigationBarBackButtonHidden()) {
-                            Text("Sign Up")
-                                .foregroundColor(.blue)
-                                .padding(.horizontal)
-                        }
+                        NavigationLink(
+                            destination: SignupView().navigationBarBackButtonHidden(),
+                            label: {
+                                HStack {
+                                    Text("Don't have an account?")
+                                        .foregroundColor(.black)
+                                    Text("Sign Up")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                        )
                     }
                     Spacer()
                 }
@@ -97,13 +102,13 @@ struct LoginView: View {
             return
         }
 
-        // Firebase authentication to sign in user
+
         Auth.auth().signIn(withEmail: email, password: password) { [self] (result, error) in
             if let error = error {
                 loginError = error.localizedDescription
                 showAlert = true
             } else if let authResult = result {
-                // Authentication successful, fetch user details from Firestore
+                
                 let userRef = Firestore.firestore().collection("Users").document(authResult.user.uid)
                 userRef.getDocument { document, error in
                     if let error = error {
@@ -112,9 +117,9 @@ struct LoginView: View {
                     } else if let userData = document?.data(),
                               let userTypeString = userData["userType"] as? String,
                               let userType = UserType(rawValue: userTypeString) {
-                        // Verify user type
+                        
                         if userType == selectedUserType {
-                            isLoggedIn = true // Update login status
+                            isLoggedIn = true 
                         } else {
                             loginError = "Invalid user type for login."
                             showAlert = true
