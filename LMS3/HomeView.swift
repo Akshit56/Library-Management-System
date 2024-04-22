@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+
+struct ScannerViewController: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> ViewController {
+        return ViewController()
+    }
+    
+    func updateUIViewController(_ uiViewController: ViewController, context: Context) {
+        // Optional: Implement update logic if needed
+    }
+}
 struct AdminHomeView: View {
     var body: some View {
         Text("Welcome Admin!")
@@ -15,7 +25,16 @@ struct AdminHomeView: View {
 
 struct LibrarianHomeView: View {
     var body: some View {
-        Text("Welcome Librarian!")
+        NavigationView {
+            VStack {
+                Text("Welcome Librarian!")
+                
+                // Navigate to ScannerViewController
+                NavigationLink(destination: ScannerViewController()) {
+                    Text("Scan Book")
+                }
+            }
+        }
     }
 }
 
